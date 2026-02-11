@@ -25,6 +25,16 @@ The tool follows the NIST 800-61 incident handling lifecycle (Detection → Cont
 
 ---
 
+## Screenshots
+
+<div align="center">
+<img src="screenshots/siren-form.png" alt="SIREN Form Interface" width="80%">
+<br><br>
+<img src="screenshots/siren-output.png" alt="SIREN Report Output" width="80%">
+</div>
+
+---
+
 ## Features
 
 **Incident Documentation**
