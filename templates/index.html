@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIREN — Incident Report Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- HEADER                                                      -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1>SIREN</h1>
+                    <span class="brand-subtitle">Security Incident Response Engine & Notation</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost" id="loadSampleBtn" title="Load sample Qakbot incident">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Load Sample
+                </button>
+                <button class="btn btn-ghost" id="clearFormBtn" title="Reset all fields">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                    Reset
+                </button>
+                <span class="header-badge">NIST 800-61</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main">
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- INPUT FORM                                              -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="form-container" id="formContainer">
+
+            <!-- Section: Incident Metadata -->
+            <section class="form-section">
+                <div class="section-header">
+                    <span class="section-icon">📋</span>
+                    <h2>Incident Metadata</h2>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="title">Incident Title <span class="required">*</span></label>
+                        <input type="text" id="title" placeholder="e.g. Qakbot Malware Infection via Phishing Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="severity">Severity Level <span class="required">*</span></label>
+                        <select id="severity">
+                            {% for level in severity_levels %}
+                            <option value="{{ level }}" {% if level == 'Medium' %}selected{% endif %}>{{ level }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category <span class="required">*</span></label>
+                        <select id="category">
+                            {% for cat in categories %}
+                            <option value="{{ cat }}">{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="analyst">Analyst Name <span class="required">*</span></label>
+                        <input type="text" id="analyst" placeholder="e.g. Jane Doe">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="description">Brief Description</label>
+                        <textarea id="description" rows="2" placeholder="Short description of the incident..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Dates sub-grid -->
+                <div class="form-grid dates-grid">
+                    <div class="form-group">
+                        <label for="detection_date">Detection Date</label>
+                        <input type="datetime-local" id="detection_date">
+                    </div>
+                    <div class="form-group">
+                        <label for="containment_date">Containment Date</label>
+                        <input type="datetime-local" id="containment_date">
+                    </div>
+                    <div class="form-group">
+                        <label for="eradication_date">Eradication Date</label>
+                        <input type="datetime-local" id="eradication_date">
+                    </div>
+                    <div class="form-group">
+                        <label for="recovery_date">Recovery Date</label>
+                        <input type="datetime-local" id="recovery_date">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Executive Summary -->
+            <section class="form-section">
+                <div class="section-header">
+                    <span class="section-icon">📝</span>
+                    <h2>Executive Summary</h2>
+                </div>
+                <div class="form-group">
+                    <label for="executive_summary">Summary for leadership / stakeholders</label>
+                    <textarea id="executive_summary" rows="4" placeholder="Provide a high-level summary of the incident, its impact, and current status..."></textarea>
+                </div>
+            </section>
+
+            <!-- Section: Timeline Events -->
+            <section class="form-section">
+                <div class="section-header">
+                    <span class="section-icon">🕐</span>
+                    <h2>Timeline Events</h2>
+                    <span class="item-count" id="timelineCount">0 events</span>
+                </div>
+                <div class="dynamic-add-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="tl_timestamp">Timestamp</label>
+                            <input type="datetime-local" id="tl_timestamp">
+                        </div>
+                        <div class="form-group">
+                            <label for="tl_source">Source</label>
+                            <input type="text" id="tl_source" placeholder="e.g. SIEM, EDR, Firewall">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="tl_description">Event Description</label>
+                            <input type="text" id="tl_description" placeholder="What happened? (Ctrl+Enter to add)">
+                        </div>
+                    </div>
+                    <button class="btn btn-add" id="addTimelineBtn">+ Add Event</button>
+                </div>
+                <div class="items-list" id="timelineList"></div>
+            </section>
+
+            <!-- Section: IOCs -->
+            <section class="form-section">
+                <div class="section-header">
+                    <span class="section-icon">🔍</span>
+                    <h2>Indicators of Compromise</h2>
+                    <span class="item-count" id="iocCount">0 IOCs</span>
+                </div>
+                <div class="dynamic-add-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="ioc_type">IOC Type</label>
+                            <select id="ioc_type">
+                                <option value="IP Address">IP Address</option>
+                                <option value="Domain">Domain</option>
+                                <option value="URL">URL</option>
+                                <option value="File Hash (MD5)">File Hash (MD5)</option>
+                                <option value="File Hash (SHA256)">File Hash (SHA256)</option>
+                                <option value="Email">Email Address</option>
+                                <option value="Username">Username</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ioc_value">Value</label>
+                            <input type="text" id="ioc_value" placeholder="e.g. 192.168.1.100 (Ctrl+Enter to add)">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="ioc_context">Context</label>
+                            <input type="text" id="ioc_context" placeholder="Where/how was this IOC observed?">
+                        </div>
+                    </div>
+                    <button class="btn btn-add" id="addIocBtn">+ Add IOC</button>
+                </div>
+                <div class="items-list" id="iocList"></div>
+            </section>
+
+            <!-- Section: Affected Systems -->
+            <section class="form-section">
+                <div class="section-header">
+                    <span class="section-icon">💻</span>
+                    <h2>Affected Systems</h2>
+                    <span class="item-count" id="systemCount">0 systems</span>
+                </div>
+                <div class="dynamic-add-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="sys_hostname">Hostname</label>
+                            <input type="text" id="sys_hostname" placeholder="e.g. WS-PC042">
+                        </div>
+                        <div class="form-group">
+                            <label for="sys_ip">IP Address</label>
+                            <input type="text" id="sys_ip" placeholder="e.g. 10.0.1.42">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="sys_impact">Impact Description</label>
+                            <input type="text" id="sys_impact" placeholder="What was the impact? (Ctrl+Enter to add)">
+                        </div>
+                    </div>
+                    <button class="btn btn-add" id="addSystemBtn">+ Add System</button>
+                </div>
+                <div class="items-list" id="systemList"></div>
+            </section>
+
+            <!-- Section: Recommendations -->
+            <section class="form-section">
+                <div class="section-header">
+                    <span class="section-icon">✅</span>
+                    <h2>Recommendations</h2>
+                    <span class="item-count" id="recCount">0 items</span>
+                </div>
+                <div class="dynamic-add-form">
+                    <div class="form-group full-width">
+                        <label for="rec_text">Recommendation</label>
+                        <input type="text" id="rec_text" placeholder="e.g. Block malicious IP ranges at perimeter firewall (Ctrl+Enter to add)">
+                    </div>
+                    <button class="btn btn-add" id="addRecBtn">+ Add Recommendation</button>
+                </div>
+                <div class="items-list" id="recList"></div>
+            </section>
+
+            <!-- GENERATE BUTTON -->
+            <div class="generate-section">
+                <button class="btn btn-primary btn-generate" id="generateBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Generate Incident Report
+                </button>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- OUTPUT SECTION                                          -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="output-container" id="outputContainer" style="display:none;">
+            <div class="output-header">
+                <h2>📄 Generated Report</h2>
+                <div class="output-tabs">
+                    <button class="tab-btn active" data-tab="markdown">Markdown</button>
+                    <button class="tab-btn" data-tab="json">JSON</button>
+                </div>
+            </div>
+
+            <div class="output-actions">
+                <button class="btn btn-action" id="copyBtn" title="Copy to clipboard">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Copy
+                </button>
+                <button class="btn btn-action" id="downloadMdBtn" title="Download as .md">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download .md
+                </button>
+                <button class="btn btn-action" id="downloadJsonBtn" title="Download as .json">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download .json
+                </button>
+                <button class="btn btn-ghost" id="backToFormBtn">
+                    ← Back to Form
+                </button>
+            </div>
+
+            <div class="output-content">
+                <pre id="markdownOutput" class="output-pre"></pre>
+                <pre id="jsonOutput" class="output-pre" style="display:none;"></pre>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- FOOTER                                                      -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <footer class="app-footer">
+        <span>SIREN v1.0.0 — Built by <a href="https://github.com/Rootless-Ghost" target="_blank">Rootless-Ghost</a></span>
+        <span class="footer-sep">·</span>
+        <span>NIST 800-61 Framework</span>
+        <span class="footer-sep">·</span>
+        <span>MIT License</span>
+    </footer>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

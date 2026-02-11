@@ -1,0 +1,139 @@
+{
+    "title": "Qakbot Malware Infection via Phishing Email",
+    "severity": "High",
+    "category": "Malware Incident",
+    "analyst": "J. Ramirez",
+    "description": "Qakbot banking trojan delivered via phishing email with malicious Excel attachment. Initial infection on workstation WS-PC042 spread laterally to two additional hosts before containment.",
+    "detection_date": "2025-02-10 09:15:00 UTC",
+    "containment_date": "2025-02-10 11:42:00 UTC",
+    "eradication_date": "2025-02-10 16:30:00 UTC",
+    "recovery_date": "2025-02-11 08:00:00 UTC",
+    "executive_summary": "On February 10, 2025, at 09:15 UTC, the SOC detected anomalous network traffic originating from workstation WS-PC042 in the Finance department. Investigation revealed a Qakbot banking trojan infection initiated through a phishing email containing a weaponized Excel spreadsheet (.xlsm). The malware established persistence via scheduled tasks and attempted lateral movement to two additional workstations. The incident was contained within 2.5 hours of detection, with full eradication completed by 16:30 UTC. No data exfiltration was confirmed, though the C2 channel was active for approximately 45 minutes before blocking. Three systems were re-imaged as a precaution. This report documents the full incident timeline, indicators of compromise, and recommended remediation actions.",
+    "timeline_events": [
+        {
+            "timestamp": "2025-02-10 08:32:00 UTC",
+            "description": "Phishing email received by user sarah.chen@acmecorp.com with subject 'Invoice #INV-2025-0847 - Urgent Review Required'",
+            "source": "Email Gateway Logs"
+        },
+        {
+            "timestamp": "2025-02-10 08:47:00 UTC",
+            "description": "User opened malicious Excel attachment 'Invoice_Feb2025.xlsm' and enabled macros",
+            "source": "EDR Telemetry"
+        },
+        {
+            "timestamp": "2025-02-10 08:48:00 UTC",
+            "description": "Macro executed PowerShell download cradle fetching Qakbot DLL from hxxps://update-service[.]xyz/dl/patch.dll",
+            "source": "EDR / Sysmon Event ID 1"
+        },
+        {
+            "timestamp": "2025-02-10 08:49:00 UTC",
+            "description": "Qakbot DLL loaded via regsvr32.exe and established persistence through scheduled task 'WindowsUpdateCheck'",
+            "source": "EDR / Sysmon Event ID 11, 12"
+        },
+        {
+            "timestamp": "2025-02-10 08:52:00 UTC",
+            "description": "C2 beacon established to 185.234.72[.]19:443 with encrypted HTTPS traffic",
+            "source": "Firewall Logs / Zeek"
+        },
+        {
+            "timestamp": "2025-02-10 09:15:00 UTC",
+            "description": "SIEM alert triggered: 'Suspicious Outbound C2 Communication Detected' - SOC analyst began investigation",
+            "source": "SIEM (ELK Stack)"
+        },
+        {
+            "timestamp": "2025-02-10 09:28:00 UTC",
+            "description": "Lateral movement detected via SMB to WS-PC019 and WS-PC055 using harvested credentials",
+            "source": "EDR / Network Flow Data"
+        },
+        {
+            "timestamp": "2025-02-10 09:37:00 UTC",
+            "description": "C2 IP blocked at perimeter firewall; DNS sinkhole configured for update-service[.]xyz",
+            "source": "Firewall / DNS"
+        },
+        {
+            "timestamp": "2025-02-10 11:42:00 UTC",
+            "description": "All three affected workstations isolated from network. Containment confirmed.",
+            "source": "EDR / Network Team"
+        },
+        {
+            "timestamp": "2025-02-10 16:30:00 UTC",
+            "description": "All affected systems re-imaged. Scheduled tasks and persistence mechanisms removed. Eradication complete.",
+            "source": "IT Operations"
+        },
+        {
+            "timestamp": "2025-02-11 08:00:00 UTC",
+            "description": "Systems restored to production. Enhanced monitoring rules deployed. User security awareness session scheduled.",
+            "source": "SOC / IT Operations"
+        }
+    ],
+    "iocs": [
+        {
+            "type": "IP Address",
+            "value": "185.234.72.19",
+            "context": "Qakbot C2 server - HTTPS traffic on port 443"
+        },
+        {
+            "type": "Domain",
+            "value": "update-service.xyz",
+            "context": "Payload delivery domain hosting Qakbot DLL"
+        },
+        {
+            "type": "URL",
+            "value": "hxxps://update-service.xyz/dl/patch.dll",
+            "context": "Direct download URL for Qakbot DLL payload"
+        },
+        {
+            "type": "File Hash (SHA256)",
+            "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "context": "SHA256 hash of malicious Excel attachment 'Invoice_Feb2025.xlsm'"
+        },
+        {
+            "type": "File Hash (SHA256)",
+            "value": "a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a",
+            "context": "SHA256 hash of downloaded Qakbot DLL 'patch.dll'"
+        },
+        {
+            "type": "Email",
+            "value": "billing@invoice-portal.com",
+            "context": "Sender address of phishing email"
+        },
+        {
+            "type": "IP Address",
+            "value": "91.215.85.42",
+            "context": "Secondary C2 server observed in Qakbot config extraction"
+        },
+        {
+            "type": "Domain",
+            "value": "invoice-portal.com",
+            "context": "Spoofed sender domain used in phishing campaign"
+        }
+    ],
+    "affected_systems": [
+        {
+            "hostname": "WS-PC042",
+            "ip_address": "10.0.2.42",
+            "impact": "Initial infection point. Full compromise - Qakbot trojan with persistence. Credentials harvested. System re-imaged."
+        },
+        {
+            "hostname": "WS-PC019",
+            "ip_address": "10.0.2.19",
+            "impact": "Lateral movement target via SMB. Qakbot DLL dropped but not fully executed. System re-imaged as precaution."
+        },
+        {
+            "hostname": "WS-PC055",
+            "ip_address": "10.0.2.55",
+            "impact": "Lateral movement target via SMB. Partial infection detected. System re-imaged as precaution."
+        }
+    ],
+    "recommendations": [
+        "Block all identified IOCs (IPs, domains, hashes) across perimeter firewall, proxy, and EDR policies",
+        "Force password reset for user sarah.chen@acmecorp.com and all accounts that authenticated on affected systems",
+        "Deploy additional email filtering rules to block .xlsm attachments from external senders",
+        "Conduct organization-wide phishing awareness training with focus on macro-enabled document risks",
+        "Enable Attack Surface Reduction (ASR) rules in Microsoft Defender to block Office macro child processes",
+        "Implement application whitelisting to prevent unauthorized DLL execution via regsvr32.exe",
+        "Review and harden SMB access policies to limit lateral movement opportunities",
+        "Deploy enhanced Sysmon configuration with focus on process creation, network connections, and scheduled task events",
+        "Schedule follow-up threat hunt targeting Qakbot TTPs (T1059.001, T1053.005, T1021.002) across the environment"
+    ]
+}

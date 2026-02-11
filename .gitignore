@@ -1,0 +1,36 @@
+# ── Python ────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+eggs/
+*.egg
+
+# ── Virtual Environment ───────────────────────
+venv/
+env/
+.env
+.venv
+
+# ── Flask ─────────────────────────────────────
+instance/
+.webassets-cache
+
+# ── IDE ───────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Generated Reports (keep samples only) ────
+*.generated.md
+*.generated.json
+
+# ── OS Files ──────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
