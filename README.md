@@ -87,8 +87,6 @@ python app.py
 
 Open your browser and navigate to **http://127.0.0.1:5000**
 
-> 📋 **Using GitHub Desktop?** See [QUICKSTART.md](QUICKSTART.md) for step-by-step setup instructions.
-
 ---
 
 ## Usage
