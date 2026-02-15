@@ -17,9 +17,13 @@ from src.report_exporter import ReportExporter
 from datetime import datetime
 import json
 import os
+import logging
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(32).hex()
+
+# Basic logging configuration; can be overridden by application configuration
+logging.basicConfig(level=logging.INFO)
 
 
 @app.route("/")
@@ -106,7 +110,15 @@ def generate_report():
         )
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logging.exception("Error generating incident report")
+        return (
+            jsonify(
+                {
+                    "error": "An internal error has occurred while generating the report."
+                }
+            ),
+            500,
+        )
 
 
 @app.route("/api/sample", methods=["GET"])
