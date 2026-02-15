@@ -129,4 +129,6 @@ if __name__ == "__main__":
     print("=" * 55)
     print("  Running at: http://127.0.0.1:5000")
     print("  Press Ctrl+C to stop\n")
-    app.run(debug=True, host="127.0.0.1", port=5000)
+    debug_env = os.getenv("FLASK_DEBUG", "").lower()
+    debug_mode = debug_env in ("1", "true", "yes")
+    app.run(debug=debug_mode, host="127.0.0.1", port=5000)
