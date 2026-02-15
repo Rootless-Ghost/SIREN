@@ -68,9 +68,9 @@ If you discover a security vulnerability in SIREN itself (not in the reports it 
 
 **DO NOT** open a public GitHub issue for security vulnerabilities.
 
-Instead, please report security issues via:
-- **GitHub Security Advisories**: Use the "Report a vulnerability" button in the Security tab
-- **Email**: 
+**How to report:**
+- Use GitHub's **Security Advisories** feature: Navigate to the Security tab and click "Report a vulnerability"
+
 
 **Response timeline:**
 - Initial response: Within 48 hours
