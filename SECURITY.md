@@ -62,9 +62,20 @@ If adapting SIREN for production use:
 
 ---
 
-## Reporting Security Issues
+## Reporting a Vulnerability
 
-If you discover a security vulnerability in SIREN, please open an issue on the GitHub repository or contact the maintainer directly. Do not include exploit details in public issues.
+If you discover a security vulnerability in SIREN itself (not in the reports it generates), please report it responsibly:
+
+**DO NOT** open a public GitHub issue for security vulnerabilities.
+
+Instead, please report security issues via:
+- **GitHub Security Advisories**: Use the "Report a vulnerability" button in the Security tab
+- **Email**: 
+
+**Response timeline:**
+- Initial response: Within 48 hours
+- Status update: Within 7 days
+- Fix timeline: Depends on severity (Critical: 7 days, High: 14 days, Medium: 30 days)
 
 ---
 
