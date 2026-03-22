@@ -254,7 +254,7 @@ See [SECURITY.md](SECURITY.md) for important security considerations when handli
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) for details.
 
 
 
