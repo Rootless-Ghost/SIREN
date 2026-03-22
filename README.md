@@ -15,7 +15,6 @@ A professional incident response documentation tool built for SOC analysts and i
 
 </div>
 
----
 
 ## Overview
 
