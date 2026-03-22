@@ -242,7 +242,7 @@ See [SECURITY.md](SECURITY.md) for important security considerations when handli
 - Do not commit generated reports to public repositories
 - Review the security hardening recommendations before any production deployment
 
-
+## Related Tools
 
 | Tool | Purpose | Link |
 |------|---------|------|
