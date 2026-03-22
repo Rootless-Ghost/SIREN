@@ -23,7 +23,7 @@ SIREN streamlines the incident documentation process by providing a clean, dark-
 
 The tool follows the NIST 800-61 incident handling lifecycle (Detection → Containment → Eradication → Recovery) and includes a severity scoring algorithm that factors in the number of IOCs, affected systems, and base severity to produce a composite risk score.
 
----
+
 
 ## Screenshots
 
@@ -33,7 +33,7 @@ The tool follows the NIST 800-61 incident handling lifecycle (Detection → Cont
 <img src="screenshots/siren-output.png" alt="SIREN Report Output" width="80%">
 </div>
 
----
+
 
 ## Features
 
@@ -63,7 +63,6 @@ The tool follows the NIST 800-61 incident handling lifecycle (Detection → Cont
 - Clean, professional interface suitable for analyst workstations
 - Sample incident report (Qakbot malware) for testing and demonstration
 
----
 
 ## Quick Start
 
@@ -97,7 +96,6 @@ python app.py
 
 Open your browser and navigate to **http://127.0.0.1:5000**
 
----
 
 ## Usage
 
@@ -129,7 +127,6 @@ Click **Generate Incident Report** to produce the final output. Switch between M
 
 Click the **Load Sample** button in the header to populate the form with a complete Qakbot malware incident. This is useful for testing or as a reference for how to fill out a thorough report.
 
----
 
 ## Project Structure
 
@@ -157,7 +154,6 @@ SIREN/
     └── sample_qakbot_incident.json # Complete sample incident report
 ```
 
----
 
 ## Example Report
 
@@ -199,7 +195,6 @@ Below is a truncated example of the Markdown output from the included Qakbot sam
 
 View the full sample in [`samples/sample_qakbot_incident.json`](samples/sample_qakbot_incident.json).
 
----
 
 ## API Endpoints
 
@@ -226,7 +221,6 @@ curl -X POST http://127.0.0.1:5000/api/generate \
   }'
 ```
 
----
 
 ## Tech Stack
 
@@ -238,7 +232,6 @@ curl -X POST http://127.0.0.1:5000/api/generate \
 | Fonts | JetBrains Mono, IBM Plex Sans |
 | Framework | NIST SP 800-61 Rev. 2 |
 
----
 
 ## Security
 
