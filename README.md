@@ -249,19 +249,22 @@ See [SECURITY.md](SECURITY.md) for important security considerations when handli
 - Do not commit generated reports to public repositories
 - Review the security hardening recommendations before any production deployment
 
----
 
-## Contributing
 
-Contributions are welcome. Please open an issue first to discuss proposed changes.
+| Tool | Purpose | Link |
+|------|---------|------|
+| **YaraForge** | YARA rule generation for malware/file detection | [GitHub](https://github.com/Rootless-Ghost/YaraForge) |
+| **SnortForge** | Snort IDS/IPS rule generation for network detection | [GitHub](https://github.com/Rootless-Ghost/SnortForge) |
+| **SigmaForge** | Sigma rule generation for SIEM detection | [GitHub](https://github.com/Rootless-Ghost/SigmaForge) |
+| **SIREN** | NIST 800-61 incident response report generator | This Repo |
 
----
+
 
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
----
+
 
 <div align="center">
 
