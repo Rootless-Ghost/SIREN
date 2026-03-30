@@ -251,6 +251,21 @@ See [SECURITY.md](SECURITY.md) for important security considerations when handli
 | **SIREN** | NIST 800-61 incident response report generator | This Repo |
 
 
+## Roadmap
+
+**Planned**
+- PDF export — generate downloadable incident reports in PDF format
+- Multi-incident dashboard — view and manage multiple incidents from a single interface
+- Evidence attachment support — upload and link screenshots, logs, and pcaps to incidents
+- Incident templates — pre-built report templates for common incident types (phishing, ransomware, insider threat, BEC)
+- Collaboration features — analyst notes and handoff tracking for shift-based SOC environments
+
+**Future Considerations**
+- MITRE ATT&CK mapping — tag timeline events and IOCs with technique IDs
+- IOC enrichment — integrate VirusTotal, AbuseIPDB, or Shodan lookups for IOC context
+- Wazuh/SIEM alert import — pull alert data directly into the incident timeline
+- Report versioning — track changes across report revisions during an active incident
+
 
 ## License
 
