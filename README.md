@@ -93,7 +93,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Open your browser and navigate to **http://127.0.0.1:5000**
+Open your browser and navigate to **http://127.0.0.1:5004**
 
 
 ## Usage
@@ -208,7 +208,7 @@ SIREN exposes a simple REST API for programmatic access:
 ### Example API Usage
 
 ```bash
-curl -X POST http://127.0.0.1:5000/api/generate \
+curl -X POST http://127.0.0.1:5004/api/generate \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Suspicious Login Activity",
@@ -240,6 +240,25 @@ See [SECURITY.md](SECURITY.md) for important security considerations when handli
 - Run SIREN on localhost only — do not expose to the public internet
 - Do not commit generated reports to public repositories
 - Review the security hardening recommendations before any production deployment
+
+## Integration with Nebula Forge
+
+SIREN occupies the **Report** phase of the Nebula Forge pipeline. It has two integration points.
+
+### ir-chain → SIREN (automated incident creation)
+
+ir-chain is the automated IR pipeline that connects EndpointTriage, log-analyzer, and SIREN. After processing an EndpointTriage case folder, ir-chain builds a structured incident payload from endpoint forensic data and log-analyzer security alerts, then calls `POST /api/generate` to create the SIREN report automatically — no analyst input required for the initial draft.
+
+ir-chain targets SIREN at the URL configured in its `config.yaml`:
+
+```yaml
+siren_url: "http://127.0.0.1:5004"
+```
+
+### nebula-dashboard → SIREN reports (report viewer)
+
+nebula-dashboard reads the JSON reports written to disk by ir-chain (in the configured `siren_reports/` directory) and displays them in a dedicated report viewer tab. Each incident's title, severity, category, timeline, IOCs, affected systems, and recommendations are surfaced without a direct API call to SIREN — making reports browsable even when SIREN is not running.
+
 
 ## Related Tools
 
