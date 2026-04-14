@@ -34,3 +34,7 @@ instance/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# ── Generated Output ──────────────────────────
+output/
+!output/.gitkeep
