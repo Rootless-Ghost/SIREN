@@ -26,6 +26,14 @@ app.config["SECRET_KEY"] = os.urandom(32).hex()
 logging.basicConfig(level=logging.INFO)
 
 
+@app.after_request
+def _set_security_headers(response):
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    return response
+
+
 @app.route("/")
 def index():
     """Serve the main SIREN web interface."""
