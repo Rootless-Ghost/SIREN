@@ -95,6 +95,15 @@ python app.py
 
 Open your browser and navigate to **http://127.0.0.1:5004**
 
+### Docker (standalone)
+
+```bash
+docker build -t siren .
+docker run -p 5004:5004 siren
+```
+
+Open http://localhost:5004
+
 
 ## Usage
 
