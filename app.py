@@ -151,4 +151,4 @@ if __name__ == "__main__":
     print("  Press Ctrl+C to stop\n")
     debug_env = os.getenv("FLASK_DEBUG", "").lower()
     debug_mode = debug_env in ("1", "true", "yes")
-    app.run(debug=debug_mode, host="127.0.0.1", port=5004)
+    app.run(debug=debug_mode, host="0.0.0.0", port=5004)
